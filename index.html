@@ -5,32 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>سامانه سفارش غذای تور چهارگاه</title>
   <style>
-    * { box-sizing: border-box; font-family: Tahoma, sans-serif; }
+    * { box-sizing: border-box; font-family: Tahoma, Arial, sans-serif; }
     body { background-color: #f7fafc; margin: 0; padding: 15px; color: #2d3748; }
     .card { max-width: 480px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     h2 { text-align: center; color: #1a365d; margin-top: 0; }
     .alert-closed { display: none; background: #fed7d7; color: #9b2c2c; padding: 10px; border-radius: 6px; text-align: center; font-weight: bold; margin-bottom: 15px; }
     .form-group { margin-bottom: 15px; }
-    label { display: block; font-weight: bold; margin-bottom: 5px; }
-    input[type="text"], input[type="password"] { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 16px; }
+    label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 15px; }
+    input[type="text"], input[type="password"] { width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 8px; font-size: 16px; outline: none; }
+    .menu-title { font-weight: bold; font-size: 16px; margin: 20px 0 10px; border-bottom: 2px solid #edf2f7; padding-bottom: 6px; }
     .food-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #edf2f7; }
     .food-info { font-size: 16px; font-weight: bold; }
-    .qty-controls { display: flex; align-items: center; gap: 8px; }
-    .btn-qty { width: 36px; height: 36px; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 20px; cursor: pointer; }
-    .qty-num { font-size: 18px; font-weight: bold; min-width: 20px; text-align: center; }
-    .btn-main { width: 100%; padding: 12px; background: #2b6cb0; color: white; border: none; border-radius: 8px; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+    .qty-controls { display: flex; align-items: center; gap: 10px; }
+    .btn-qty { width: 38px; height: 38px; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 20px; font-weight: bold; cursor: pointer; }
+    .qty-num { font-size: 18px; font-weight: bold; min-width: 24px; text-align: center; }
+    .btn-main { width: 100%; padding: 14px; background: #2b6cb0; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
     .btn-main:disabled { background: #a0aec0; cursor: not-allowed; }
-    .btn-leader { width: 100%; padding: 10px; background: #edf2f7; color: #4a5568; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 25px; }
-    #msg { text-align: center; margin-top: 15px; font-weight: bold; }
+    .btn-leader { width: 100%; padding: 12px; background: #edf2f7; color: #4a5568; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 25px; }
+    #msg { text-align: center; margin-top: 15px; font-weight: bold; font-size: 15px; }
  
-    /* پاپ‌آپ‌ها */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; justify-content: center; align-items: center; padding: 15px; }
-    .modal-content { background: #fff; width: 100%; max-width: 420px; border-radius: 10px; padding: 20px; }
-    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    .manage-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; }
-    .btn-del { background: #fff5f5; color: #e53e3e; border: 1px solid #feb2b2; border-radius: 4px; padding: 4px 8px; cursor: pointer; }
-    .status-toggle { display: flex; justify-content: space-between; align-items: center; background: #f7fafc; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
-    .toggle-btn { padding: 6px 12px; border-radius: 6px; border: none; color: white; font-weight: bold; cursor: pointer; }
+    /* پنجره پاپ‌آپ */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 10000; justify-content: center; align-items: center; padding: 15px; }
+    .modal-content { background: #fff; width: 100%; max-width: 420px; border-radius: 12px; padding: 20px; max-height: 85vh; overflow-y: auto; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #edf2f7; padding-bottom: 10px; }
+    .manage-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #e2e8f0; }
+    .btn-del { background: #fff5f5; color: #e53e3e; border: 1px solid #feb2b2; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-weight: bold; }
+    .status-toggle { display: flex; justify-content: space-between; align-items: center; background: #edf2f7; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
+    .toggle-btn { padding: 8px 16px; border-radius: 6px; border: none; color: white; font-weight: bold; cursor: pointer; }
     .open { background: #38a169; }
     .closed { background: #e53e3e; }
   </style>
@@ -40,56 +41,57 @@
 <div class="card">
   <h2>سامانه سفارش غذای تور چهارگاه</h2>
  
-  <div id="closedAlert" class="alert-closed">سفارش‌گیری در حال حاضر بسته است.</div>
+  <div id="closedAlert" class="alert-closed">سفارش‌گیری در حال حاضر توسط لیدر بسته است.</div>
  
   <div class="form-group">
-    <label>نام و نام خانوادگی:</label>
-    <input type="text" id="custName" placeholder="نام خود را وارد کنید">
+    <label>نام و نام خانوادگی همسفر:</label>
+    <input type="text" id="custName" placeholder="مثال: علی رضایی">
   </div>
  
-  <div style="font-weight: bold; margin: 15px 0 5px; border-bottom: 2px solid #edf2f7; padding-bottom: 5px;">لیست غذاها:</div>
+  <div class="menu-title">لیست غذاها</div>
   <div id="foodListContainer"></div>
  
-  <button type="button" class="btn-main" id="submitBtn" onclick="sendOrder()">ثبت سفارش</button>
+  <button type="button" class="btn-main" id="submitBtn">ثبت سفارش</button>
   <div id="msg"></div>
  
-  <button type="button" class="btn-leader" onclick="showPassModal()">⚙️ ورود به پنل مدیریت لیدر</button>
+  <button type="button" class="btn-leader" id="openPassModalBtn">⚙️ ورود به پنل مدیریت لیدر</button>
 </div>
  
-<!-- پاپ‌آپ رمز -->
+<!-- پاپ‌آپ رمز ورود لیدر -->
 <div id="passModal" class="modal">
   <div class="modal-content">
     <div class="modal-head">
-      <h3 style="margin:0;">رمز لیدر</h3>
-      <span style="cursor:pointer; font-size:20px;" onclick="closePassModal()">✕</span>
+      <h3 style="margin:0; font-size:17px;">ورود به پنل مدیریت لیدر</h3>
+      <span style="cursor:pointer; font-size:22px; font-weight:bold;" id="closePassModalBtn">✕</span>
     </div>
     <div class="form-group">
-      <input type="password" id="passInput" placeholder="رمز را وارد کنید (1234)">
+      <label>رمز عبور لیدر را وارد کنید:</label>
+      <input type="password" id="passInput" placeholder="رمز پیش‌فرض: 1234">
     </div>
-    <button type="button" class="btn-main" style="margin-top:0;" onclick="checkPass()">ورود</button>
+    <button type="button" class="btn-main" id="checkPassBtn" style="margin-top:5px;">تایید و ورود</button>
   </div>
 </div>
  
-<!-- پاپ‌آپ مدیریت -->
+<!-- پاپ‌آپ تنظیمات و مدیریت منو -->
 <div id="adminModal" class="modal">
   <div class="modal-content">
     <div class="modal-head">
-      <h3 style="margin:0;">مدیریت رستوران و منو</h3>
-      <span style="cursor:pointer; font-size:20px;" onclick="closeAdminModal()">✕</span>
+      <h3 style="margin:0; font-size:18px;">مدیریت رستوران و منو</h3>
+      <span style="cursor:pointer; font-size:22px; font-weight:bold;" id="closeAdminModalBtn">✕</span>
     </div>
  
     <div class="status-toggle">
-      <span>وضعیت سفارش مسافران:</span>
-      <button type="button" id="toggleStatusBtn" class="toggle-btn open" onclick="toggleStatus()">فعال است</button>
+      <span style="font-weight:bold;">سفارش‌گیری مسافران:</span>
+      <button type="button" id="toggleStatusBtn" class="toggle-btn open">فعال است</button>
     </div>
  
-    <div style="font-weight:bold; margin-bottom:5px;">افزودن غذای جدید:</div>
-    <div style="display:flex; gap:6px; margin-bottom:15px;">
-      <input type="text" id="newFoodName" placeholder="نام غذا...">
-      <button type="button" class="btn-main" style="margin-top:0; width:auto; padding:0 15px;" onclick="addFoodItem()">+</button>
+    <div style="font-weight:bold; margin-bottom:6px;">افزودن غذای جدید:</div>
+    <div style="display:flex; gap:8px; margin-bottom:15px;">
+      <input type="text" id="newFoodName" placeholder="نام غذای جدید...">
+      <button type="button" class="btn-main" id="addFoodBtn" style="margin-top:0; width:auto; padding:0 18px;">+ افزودن</button>
     </div>
  
-    <div style="font-weight:bold; margin-bottom:5px;">غذاهای موجود:</div>
+    <div style="font-weight:bold; margin-bottom:8px;">غذاهای فعال در منو:</div>
     <div id="adminFoodList"></div>
   </div>
 </div>
@@ -101,7 +103,10 @@
   let orderQty = {};
   let isOpen = true;
  
-  function render() {
+  // ایجاد لیست اولیه غذاها
+  foods.forEach(f => { orderQty[f] = 0; });
+ 
+  function renderMenu() {
     const box = document.getElementById("foodListContainer");
     box.innerHTML = "";
     foods.forEach(f => {
@@ -111,39 +116,58 @@
       d.innerHTML = `
         <span class="food-info">${f}</span>
         <div class="qty-controls">
-          <button type="button" class="btn-qty" onclick="changeCount('${f}', -1)">-</button>
+          <button type="button" class="btn-qty" data-name="${f}" data-delta="-1">-</button>
           <span class="qty-num">${orderQty[f]}</span>
-          <button type="button" class="btn-qty" onclick="changeCount('${f}', 1)">+</button>
+          <button type="button" class="btn-qty" data-name="${f}" data-delta="1">+</button>
         </div>
       `;
       box.appendChild(d);
     });
+ 
+    // اتصال مستقیم کلیدهای مثبت و منفی
+    document.querySelectorAll(".btn-qty").forEach(btn => {
+      btn.onclick = function() {
+        if (!isOpen) return;
+        const name = this.getAttribute("data-name");
+        const delta = parseInt(this.getAttribute("data-delta"));
+        let val = (orderQty[name] || 0) + delta;
+        if (val < 0) val = 0;
+        orderQty[name] = val;
+        renderMenu();
+      };
+    });
   }
  
-  function changeCount(item, delta) {
-    if (!isOpen) return;
-    let val = (orderQty[item] || 0) + delta;
-    if (val < 0) val = 0;
-    orderQty[item] = val;
-    render();
-  }
+  // ثبت سفارش مسافر
+  document.getElementById("submitBtn").onclick = function() {
+    if (!isOpen) {
+      alert("سفارش‌گیری در حال حاضر بسته است.");
+      return;
+    }
  
-  function sendOrder() {
-    if (!isOpen) { alert("سفارش‌گیری بسته است."); return; }
     const name = document.getElementById("custName").value.trim();
-    if (!name) { alert("لطفاً نام خود را وارد کنید."); return; }
+    if (!name) {
+      alert("لطفاً نام و نام خانوادگی خود را بنویسید.");
+      return;
+    }
  
     let selected = [];
     for (let k in orderQty) {
-      if (orderQty[k] > 0) selected.push(k + " (" + orderQty[k] + " عدد)");
+      if (orderQty[k] > 0) {
+        selected.push(k + " (" + orderQty[k] + " عدد)");
+      }
     }
-    if (selected.length === 0) { alert("حداقل یک غذا انتخاب کنید."); return; }
+ 
+    if (selected.length === 0) {
+      alert("لطفاً حداقل یک غذا انتخاب کنید.");
+      return;
+    }
  
     const btn = document.getElementById("submitBtn");
     const msg = document.getElementById("msg");
     btn.disabled = true;
     msg.style.color = "#2b6cb0";
-    msg.innerText = "در حال ثبت...";
+    msg.innerText = "در حال ارسال سفارش...";
  
     fetch(SCRIPT_URL, {
       method: "POST",
@@ -156,86 +180,105 @@
       msg.innerText = "سفارش شما با موفقیت ثبت شد!";
       document.getElementById("custName").value = "";
       for (let k in orderQty) orderQty[k] = 0;
-      render();
+      renderMenu();
       btn.disabled = false;
     })
     .catch(() => {
       msg.style.color = "red";
-      msg.innerText = "خطا در ثبت سفارش.";
+      msg.innerText = "خطا در ثبت سفارش. لطفاً دوباره تلاش کنید.";
       btn.disabled = false;
     });
-  }
+  };
  
-  function showPassModal() {
+  // باز کردن پنجره رمز لیدر
+  document.getElementById("openPassModalBtn").onclick = function() {
     document.getElementById("passModal").style.display = "flex";
     document.getElementById("passInput").value = "";
-  }
-  function closePassModal() { document.getElementById("passModal").style.display = "none"; }
+  };
  
-  function checkPass() {
-    if (document.getElementById("passInput").value === "1234") {
-      closePassModal();
+  document.getElementById("closePassModalBtn").onclick = function() {
+    document.getElementById("passModal").style.display = "none";
+  };
+ 
+  // اعتبارسنجی رمز لیدر
+  document.getElementById("checkPassBtn").onclick = function() {
+    const val = document.getElementById("passInput").value;
+    if (val === "1234") {
+      document.getElementById("passModal").style.display = "none";
       document.getElementById("adminModal").style.display = "flex";
-      renderAdmin();
+      renderAdminList();
     } else {
-      alert("رمز اشتباه است.");
+      alert("رمز ورود اشتباه است.");
     }
-  }
-  function closeAdminModal() { document.getElementById("adminModal").style.display = "none"; }
+  };
  
-  function toggleStatus() {
+  document.getElementById("closeAdminModalBtn").onclick = function() {
+    document.getElementById("adminModal").style.display = "none";
+  };
+ 
+  // روشن/خاموش کردن سفارش‌گیری
+  document.getElementById("toggleStatusBtn").onclick = function() {
     isOpen = !isOpen;
-    const btn = document.getElementById("toggleStatusBtn");
     const alertBox = document.getElementById("closedAlert");
     const submitBtn = document.getElementById("submitBtn");
  
     if (isOpen) {
-      btn.className = "toggle-btn open";
-      btn.innerText = "فعال است";
+      this.className = "toggle-btn open";
+      this.innerText = "فعال است";
       alertBox.style.display = "none";
       submitBtn.disabled = false;
     } else {
-      btn.className = "toggle-btn closed";
-      btn.innerText = "بسته است";
+      this.className = "toggle-btn closed";
+      this.innerText = "بسته است";
       alertBox.style.display = "block";
       submitBtn.disabled = true;
     }
-  }
+  };
  
-  function renderAdmin() {
+  // نمایش لیست غذاها در پنل مدیریت
+  function renderAdminList() {
     const box = document.getElementById("adminFoodList");
     box.innerHTML = "";
-    foods.forEach((f, i) => {
+    foods.forEach((f, idx) => {
       const d = document.createElement("div");
       d.className = "manage-row";
       d.innerHTML = `
-        <span>${f}</span>
-        <button type="button" class="btn-del" onclick="removeFood(${i})">حذف</button>
+        <span style="font-weight:500;">${f}</span>
+        <button type="button" class="btn-del" data-index="${idx}">حذف</button>
       `;
       box.appendChild(d);
     });
+ 
+    document.querySelectorAll(".btn-del").forEach(btn => {
+      btn.onclick = function() {
+        const i = parseInt(this.getAttribute("data-index"));
+        const item = foods[i];
+        foods.splice(i, 1);
+        delete orderQty[item];
+        renderMenu();
+        renderAdminList();
+      };
+    });
   }
  
-  function addFoodItem() {
-    const val = document.getElementById("newFoodName").value.trim();
+  // افزودن غذای جدید
+  document.getElementById("addFoodBtn").onclick = function() {
+    const input = document.getElementById("newFoodName");
+    const val = input.value.trim();
     if (!val) return;
-    if (foods.includes(val)) { alert("این غذا از قبل هست."); return; }
+    if (foods.includes(val)) {
+      alert("این غذا قبلاً اضافه شده است.");
+      return;
+    }
     foods.push(val);
     orderQty[val] = 0;
-    document.getElementById("newFoodName").value = "";
-    render();
-    renderAdmin();
-  }
+    input.value = "";
+    renderMenu();
+    renderAdminList();
+  };
  
-  function removeFood(idx) {
-    const item = foods[idx];
-    foods.splice(idx, 1);
-    delete orderQty[item];
-    render();
-    renderAdmin();
-  }
- 
-  render();
+  // راه‌اندازی اولیه
+  renderMenu();
 </script>
  
 </body>
