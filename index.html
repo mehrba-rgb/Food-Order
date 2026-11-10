@@ -1,185 +1,282 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سامانه سفارش غذای تور چهارگاه</title>
-  <style>
-    * { box-sizing: border-box; font-family: Tahoma, Arial, sans-serif; }
-    body { background-color: #f4f6f9; margin: 0; padding: 16px; color: #333; }
-    .container { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
-    h1 { font-size: 20px; text-align: center; color: #1a365d; margin-bottom: 20px; }
-    .input-group { margin-bottom: 16px; }
-    label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 15px; }
-    input[type="text"] { width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 8px; font-size: 16px; }
-    .menu-title { font-size: 17px; font-weight: bold; margin: 20px 0 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; color: #2d3748; }
-    .food-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #edf2f7; }
-    .food-name { font-size: 16px; font-weight: 500; }
-    .counter { display: flex; align-items: center; gap: 10px; }
-    .btn-count { width: 38px; height: 38px; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 20px; font-weight: bold; cursor: pointer; }
-    .count-display { font-size: 18px; font-weight: bold; min-width: 24px; text-align: center; }
-    .btn-submit { width: 100%; padding: 14px; background: #2b6cb0; color: #fff; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 24px; }
-    .btn-submit:disabled { background: #a0aec0; }
-    .leader-link { display: block; text-align: center; margin-top: 30px; font-size: 12px; color: #a0aec0; text-decoration: none; cursor: pointer; }
-    #status-msg { margin-top: 15px; text-align: center; font-size: 15px; font-weight: bold; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سامانه سفارش غذای تور چهارگاه</title>
+<style>
+* { box-sizing: border-box; font-family: Tahoma, Arial, sans-serif; }
+body { background-color: #f4f6f9; margin: 0; padding: 16px; color: #333; }
+.container { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+h1 { font-size: 20px; text-align: center; color: #1a365d; margin-bottom: 20px; }
+.status-banner { background: #fed7d7; color: #9b2c2c; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 16px; display: none; }
+.input-group { margin-bottom: 16px; }
+label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 15px; }
+input[type="text"] { width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 8px; font-size: 16px; }
+.menu-title { font-size: 17px; font-weight: bold; margin: 20px 0 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; color: #2d3748; }
+.food-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #edf2f7; }
+.food-name { font-size: 16px; font-weight: 500; }
+.counter { display: flex; align-items: center; gap: 10px; }
+.btn-count { width: 38px; height: 38px; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 20px; font-weight: bold; cursor: pointer; }
+.count-display { font-size: 18px; font-weight: bold; min-width: 24px; text-align: center; }
+.btn-submit { width: 100%; padding: 14px; background: #2b6cb0; color: #fff; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 24px; }
+.btn-submit:disabled { background: #a0aec0; cursor: not-allowed; }
+.leader-link { display: block; text-align: center; margin-top: 35px; font-size: 13px; color: #718096; text-decoration: underline; cursor: pointer; }
+#status-msg { margin-top: 15px; text-align: center; font-size: 15px; font-weight: bold; }
+ 
+/* پنل مدیریت لیدر */
+#leader-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 16px; }
+.modal-content { background: #fff; width: 100%; max-width: 450px; border-radius: 12px; padding: 20px; max-height: 90vh; overflow-y: auto; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 16px; }
+.btn-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #a0aec0; }
+.toggle-box { display: flex; justify-content: space-between; align-items: center; background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #e2e8f0; }
+.btn-toggle { padding: 8px 16px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
+.btn-active { background: #48bb78; color: #fff; }
+.btn-inactive { background: #e53e3e; color: #fff; }
+.add-food-box { display: flex; gap: 8px; margin-bottom: 16px; }
+.add-food-box input { flex: 1; }
+.btn-add { background: #3182ce; color: #fff; border: none; border-radius: 8px; padding: 0 16px; font-weight: bold; cursor: pointer; }
+.manage-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; }
+.btn-del { background: #fff5f5; color: #e53e3e; border: 1px solid #feb2b2; border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 13px; }
+</style>
 </head>
 <body>
  
 <div class="container">
-  <h1>سامانه سفارش غذای تور چهارگاه</h1>
+<h1>سامانه سفارش غذای تور چهارگاه</h1>
  
-  <div class="input-group">
-    <label for="traveler-name">نام و نام خانوادگی همسفر:</label>
-    <input type="text" id="traveler-name" placeholder="مثال: علی رضایی">
-  </div>
+<div id="closed-alert" class="status-banner">ثبت سفارش در حال حاضر توسط لیدر بسته است.</div>
  
-  <div class="menu-title">لیست غذاها</div>
+<div class="input-group">
+<label for="traveler-name">نام و نام خانوادگی همسفر:</label>
+<input type="text" id="traveler-name" placeholder="مثال: علی رضایی">
+</div>
  
-  <div id="food-list">
-    <div class="food-item">
-      <span class="food-name">چلو گردن</span>
-      <div class="counter">
-        <button class="btn-count" onclick="changeQty('چلو گردن', -1)">-</button>
-        <span class="count-display" id="qty-چلو گردن">0</span>
-        <button class="btn-count" onclick="changeQty('چلو گردن', 1)">+</button>
-      </div>
-    </div>
+<div class="menu-title">لیست غذاها</div>
  
-    <div class="food-item">
-      <span class="food-name">چلو کباب کوبیده</span>
-      <div class="counter">
-        <button class="btn-count" onclick="changeQty('چلو کباب کوبیده', -1)">-</button>
-        <span class="count-display" id="qty-چلو کباب کوبیده">0</span>
-        <button class="btn-count" onclick="changeQty('چلو کباب کوبیده', 1)">+</button>
-      </div>
-    </div>
+<div id="food-list"></div>
  
-    <div class="food-item">
-      <span class="food-name">چلو جوجه کباب</span>
-      <div class="counter">
-        <button class="btn-count" onclick="changeQty('چلو جوجه کباب', -1)">-</button>
-        <span class="count-display" id="qty-چلو جوجه کباب">0</span>
-        <button class="btn-count" onclick="changeQty('چلو جوجه کباب', 1)">+</button>
-      </div>
-    </div>
+<button class="btn-submit" id="submit-btn" onclick="submitOrder()">ثبت سفارش</button>
+<div id="status-msg"></div>
  
-    <div class="food-item">
-      <span class="food-name">سوپ جو</span>
-      <div class="counter">
-        <button class="btn-count" onclick="changeQty('سوپ جو', -1)">-</button>
-        <span class="count-display" id="qty-سوپ جو">0</span>
-        <button class="btn-count" onclick="changeQty('سوپ جو', 1)">+</button>
-      </div>
-    </div>
+<span class="leader-link" onclick="promptLeader()">• ورود به پنل لیدر •</span>
+</div>
  
-    <div class="food-item">
-      <span class="food-name">ماست موسیر</span>
-      <div class="counter">
-        <button class="btn-count" onclick="changeQty('ماست موسیر', -1)">-</button>
-        <span class="count-display" id="qty-ماست موسیر">0</span>
-        <button class="btn-count" onclick="changeQty('ماست موسیر', 1)">+</button>
-      </div>
-    </div>
+<!-- پنجره پنل لیدر -->
+<div id="leader-modal">
+<div class="modal-content">
+<div class="modal-header">
+<h3 style="margin:0; font-size: 18px;">تنظیمات و مدیریت منو</h3>
+<button class="btn-close" onclick="closeLeaderPanel()">✕</button>
+</div>
  
-    <div class="food-item">
-      <span class="food-name">نوشابه</span>
-      <div class="counter">
-        <button class="btn-count" onclick="changeQty('نوشابه', -1)">-</button>
-        <span class="count-display" id="qty-نوشابه">0</span>
-        <button class="btn-count" onclick="changeQty('نوشابه', 1)">+</button>
-      </div>
-    </div>
-  </div>
+<!-- وضعیت باز/بسته بودن رستوران -->
+<div class="toggle-box">
+<span style="font-weight: bold;">وضعیت سفارش‌گیری:</span>
+<button id="toggle-order-btn" class="btn-toggle btn-active" onclick="toggleOrderingStatus()">فعال است</button>
+</div>
  
-  <button class="btn-submit" id="submit-btn" onclick="submitOrder()">ثبت سفارش</button>
-  <div id="status-msg"></div>
+<!-- افزودن غذای جدید -->
+<div style="font-weight: bold; margin-bottom: 8px; font-size: 15px;">افزودن غذای جدید:</div>
+<div class="add-food-box">
+<input type="text" id="new-food-name" placeholder="نام غذا یا نوشیدنی...">
+<button class="btn-add" onclick="addNewFood()">+ افزودن</button>
+</div>
  
-  <span class="leader-link" onclick="openLeaderPanel()">• پنل لیدر •</span>
+<!-- لیست غذاهای فعلی برای مدیریت -->
+<div style="font-weight: bold; margin-bottom: 8px; font-size: 15px;">مدیریت غذاهای فعال منو:</div>
+<div id="manage-food-list"></div>
+</div>
 </div>
  
 <script>
-  // لینک متصل به گوگل شیت و اسکریپت
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFBFq8mAZbz_eTXv84NUtmAL_trp0VMr6WV5qWQptKaPsxvkfuh03m8pRUSb78FZqd/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFBFq8mAZbz_eTXv84NUtmAL_trp0VMr6WV5qWQptKaPsxvkfuh03m8pRUSb78FZqd/exec";
  
-  const orders = {
-    "چلو گردن": 0,
-    "چلو کباب کوبیده": 0,
-    "چلو جوجه کباب": 0,
-    "سوپ جو": 0,
-    "ماست موسیر": 0,
-    "نوشابه": 0
-  };
+// لیست پیش‌فرض غذاها (در صورت ذخیره نشدن در مرورگر)
+const defaultFoods = ["چلو گردن", "چلو کباب کوبیده", "چلو جوجه کباب", "سوپ جو", "ماست موسیر", "نوشابه"];
  
-  function changeQty(foodName, delta) {
-    const current = orders[foodName] || 0;
-    const updated = Math.max(0, current + delta);
-    orders[foodName] = updated;
-    document.getElementById(`qty-${foodName}`).innerText = updated;
-  }
+let foodItems = JSON.parse(localStorage.getItem("tour_menu")) || defaultFoods;
+let isOrderingActive = localStorage.getItem("tour_ordering_active") !== "false";
+let orders = {};
  
-  function submitOrder() {
-    const name = document.getElementById("traveler-name").value.trim();
-    const statusMsg = document.getElementById("status-msg");
-    const submitBtn = document.getElementById("submit-btn");
+function initApp() {
+renderMenu();
+updateOrderStatusUI();
+}
  
-    if (!name) {
-      alert("لطفاً نام و نام خانوادگی خود را بنویسید.");
-      return;
-    }
+function renderMenu() {
+const listEl = document.getElementById("food-list");
+listEl.innerHTML = "";
+orders = {};
  
-    const selectedItems = [];
-    for (const [item, count] of Object.entries(orders)) {
-      if (count > 0) {
-        selectedItems.push(`${item} (${count} عدد)`);
-      }
-    }
+foodItems.forEach(item => {
+orders[item] = 0;
+const row = document.createElement("div");
+row.className = "food-item";
+row.innerHTML = `
+<span class="food-name">${item}</span>
+<div class="counter">
+<button class="btn-count" onclick="changeQty('${item}', -1)">-</button>
+<span class="count-display" id="qty-${item}">0</span>
+<button class="btn-count" onclick="changeQty('${item}', 1)">+</button>
+</div>
+`;
+listEl.appendChild(row);
+});
+}
  
-    if (selectedItems.length === 0) {
-      alert("لطفاً حداقل یک غذا انتخاب کنید.");
-      return;
-    }
+function changeQty(foodName, delta) {
+if (!isOrderingActive) return;
+const current = orders[foodName] || 0;
+const updated = Math.max(0, current + delta);
+orders[foodName] = updated;
+document.getElementById(`qty-${foodName}`).innerText = updated;
+}
  
-    submitBtn.disabled = true;
-    statusMsg.style.color = "#2b6cb0";
-    statusMsg.innerText = "در حال ثبت سفارش...";
+function updateOrderStatusUI() {
+const submitBtn = document.getElementById("submit-btn");
+const closedAlert = document.getElementById("closed-alert");
+const toggleBtn = document.getElementById("toggle-order-btn");
  
-    const payload = {
-      name: name,
-      order: selectedItems.join("، ")
-    };
+if (isOrderingActive) {
+submitBtn.disabled = false;
+closedAlert.style.display = "none";
+if (toggleBtn) {
+toggleBtn.innerText = "فعال است";
+toggleBtn.className = "btn-toggle btn-active";
+}
+} else {
+submitBtn.disabled = true;
+closedAlert.style.display = "block";
+if (toggleBtn) {
+toggleBtn.innerText = "بسته است";
+toggleBtn.className = "btn-toggle btn-inactive";
+}
+}
+}
  
-    fetch(SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-    .then(() => {
-      statusMsg.style.color = "green";
-      statusMsg.innerText = "سفارش شما با موفقیت ثبت شد!";
-      document.getElementById("traveler-name").value = "";
-      for (const item of Object.keys(orders)) {
-        orders[item] = 0;
-        document.getElementById(`qty-${item}`).innerText = "0";
-      }
-      submitBtn.disabled = false;
-    })
-    .catch((err) => {
-      statusMsg.style.color = "red";
-      statusMsg.innerText = "خطا در ثبت سفارش. لطفاً دوباره تلاش کنید.";
-      submitBtn.disabled = false;
-    });
-  }
+function submitOrder() {
+if (!isOrderingActive) {
+alert("سفارش‌گیری در حال حاضر بسته است.");
+return;
+}
  
-  function openLeaderPanel() {
-    const pass = prompt("رمز ورود لیدر را وارد کنید:");
-    if (pass === "1234") {
-      alert("ورود تایید شد. شیت سفارش‌ها در اکانت گوگل شما فعال است.");
-    } else if (pass !== null) {
-      alert("رمز اشتباه است.");
-    }
-  }
+const name = document.getElementById("traveler-name").value.trim();
+const statusMsg = document.getElementById("status-msg");
+const submitBtn = document.getElementById("submit-btn");
+ 
+if (!name) {
+alert("لطفاً نام و نام خانوادگی خود را بنویسید.");
+return;
+}
+ 
+const selectedItems = [];
+for (const [item, count] of Object.entries(orders)) {
+if (count > 0) {
+selectedItems.push(`${item} (${count} عدد)`);
+}
+}
+ 
+if (selectedItems.length === 0) {
+alert("لطفاً حداقل یک غذا انتخاب کنید.");
+return;
+}
+ 
+submitBtn.disabled = true;
+statusMsg.style.color = "#2b6cb0";
+statusMsg.innerText = "در حال ثبت سفارش...";
+ 
+const payload = {
+name: name,
+order: selectedItems.join("، ")
+};
+ 
+fetch(SCRIPT_URL, {
+method: "POST",
+mode: "no-cors",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify(payload)
+})
+.then(() => {
+statusMsg.style.color = "green";
+statusMsg.innerText = "سفارش شما با موفقیت ثبت شد!";
+document.getElementById("traveler-name").value = "";
+renderMenu();
+submitBtn.disabled = false;
+})
+.catch(() => {
+statusMsg.style.color = "red";
+statusMsg.innerText = "خطا در ثبت سفارش. لطفاً دوباره تلاش کنید.";
+submitBtn.disabled = false;
+});
+}
+ 
+/* توابع پنل لیدر */
+function promptLeader() {
+const pass = prompt("رمز ورود لیدر را وارد کنید:");
+if (pass === "1234") {
+openLeaderPanel();
+} else if (pass !== null) {
+alert("رمز اشتباه است.");
+}
+}
+ 
+function openLeaderPanel() {
+document.getElementById("leader-modal").style.display = "flex";
+renderManageList();
+updateOrderStatusUI();
+}
+ 
+function closeLeaderPanel() {
+document.getElementById("leader-modal").style.display = "none";
+}
+ 
+function toggleOrderingStatus() {
+isOrderingActive = !isOrderingActive;
+localStorage.setItem("tour_ordering_active", isOrderingActive);
+updateOrderStatusUI();
+}
+ 
+function renderManageList() {
+const manageListEl = document.getElementById("manage-food-list");
+manageListEl.innerHTML = "";
+foodItems.forEach((item, index) => {
+const row = document.createElement("div");
+row.className = "manage-item";
+row.innerHTML = `
+<span>${item}</span>
+<button class="btn-del" onclick="deleteFood(${index})">حذف</button>
+`;
+manageListEl.appendChild(row);
+});
+}
+ 
+function addNewFood() {
+const input = document.getElementById("new-food-name");
+const name = input.value.trim();
+if (!name) return;
+if (foodItems.includes(name)) {
+alert("این غذا قبلاً اضافه شده است.");
+return;
+}
+foodItems.push(name);
+localStorage.setItem("tour_menu", JSON.stringify(foodItems));
+input.value = "";
+renderManageList();
+renderMenu();
+}
+ 
+function deleteFood(index) {
+if (confirm(`آیا از حذف "${foodItems[index]}" مطمئن هستید؟`)) {
+foodItems.splice(index, 1);
+localStorage.setItem("tour_menu", JSON.stringify(foodItems));
+renderManageList();
+renderMenu();
+}
+}
+ 
+// اجرای اولیه
+initApp();
 </script>
  
 </body>
