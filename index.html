@@ -24,20 +24,20 @@
     .leader-link { display: block; text-align: center; margin-top: 35px; font-size: 13px; color: #718096; text-decoration: underline; cursor: pointer; }
     #status-msg { margin-top: 15px; text-align: center; font-size: 15px; font-weight: bold; }
  
-    /* پنجره‌های پاپ‌آپ */
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 16px; }
-    .modal-box { background: #fff; width: 100%; max-width: 420px; border-radius: 12px; padding: 20px; max-height: 90vh; overflow-y: auto; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 16px; }
-    .btn-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #a0aec0; }
-    .toggle-box { display: flex; justify-content: space-between; align-items: center; background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #e2e8f0; }
-    .btn-toggle { padding: 8px 16px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
-    .btn-active { background: #48bb78; color: #fff; }
+    /* پنجره‌های پاپ‌آپ مدیریت */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 9999; justify-content: center; align-items: center; padding: 16px; }
+    .modal-box { background: #fff; width: 100%; max-width: 440px; border-radius: 12px; padding: 22px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 16px; }
+    .btn-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #718096; font-weight: bold; }
+    .toggle-box { display: flex; justify-content: space-between; align-items: center; background: #edf2f7; padding: 12px; border-radius: 8px; margin-bottom: 20px; }
+    .btn-toggle { padding: 9px 18px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 14px; }
+    .btn-active { background: #38a169; color: #fff; }
     .btn-inactive { background: #e53e3e; color: #fff; }
     .add-food-box { display: flex; gap: 8px; margin-bottom: 16px; }
     .add-food-box input { flex: 1; }
     .btn-add { background: #3182ce; color: #fff; border: none; border-radius: 8px; padding: 0 16px; font-weight: bold; cursor: pointer; }
-    .manage-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; }
-    .btn-del { background: #fff5f5; color: #e53e3e; border: 1px solid #feb2b2; border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 13px; }
+    .manage-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #e2e8f0; }
+    .btn-del { background: #fff5f5; color: #e53e3e; border: 1px solid #feb2b2; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 13px; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -55,56 +55,55 @@
   <div class="menu-title">لیست غذاها</div>
   <div id="food-list"></div>
  
-  <button class="btn-submit" id="submit-btn" onclick="submitOrder()">ثبت سفارش</button>
+  <button type="button" class="btn-submit" id="submit-btn" onclick="submitOrder()">ثبت سفارش</button>
   <div id="status-msg"></div>
  
   <span class="leader-link" onclick="openPasswordModal()">• ورود به پنل لیدر •</span>
 </div>
  
-<!-- مودال رمز لیدر -->
+<!-- پاپ‌آپ رمز ورود لیدر -->
 <div id="password-modal" class="modal-overlay">
   <div class="modal-box">
     <div class="modal-header">
       <h3 style="margin:0; font-size: 17px;">ورود به پنل مدیریت لیدر</h3>
-      <button class="btn-close" onclick="closePasswordModal()">✕</button>
+      <button type="button" class="btn-close" onclick="closePasswordModal()">✕</button>
     </div>
     <div class="input-group">
-      <label>رمز عبور را وارد کنید:</label>
+      <label>رمز عبور لیدر را وارد کنید:</label>
       <input type="password" id="leader-password" placeholder="رمز پیش‌فرض: 1234">
     </div>
-    <button class="btn-submit" style="margin-top: 10px;" onclick="checkLeaderPassword()">ورود</button>
+    <button type="button" class="btn-submit" style="margin-top: 8px;" onclick="checkLeaderPassword()">تایید و ورود</button>
   </div>
 </div>
  
-<!-- مودال مدیریت رستوران و منو -->
+<!-- پاپ‌آپ اصلی پنل مدیریت لیدر -->
 <div id="leader-modal" class="modal-overlay">
   <div class="modal-box">
     <div class="modal-header">
-      <h3 style="margin:0; font-size: 18px;">مدیریت رستوران و منو</h3>
-      <button class="btn-close" onclick="closeLeaderModal()">✕</button>
+      <h3 style="margin:0; font-size: 18px;">مدیریت رستوران و منوی غذا</h3>
+      <button type="button" class="btn-close" onclick="closeLeaderModal()">✕</button>
     </div>
  
     <!-- وضعیت باز/بسته بودن سفارشات -->
     <div class="toggle-box">
-      <span style="font-weight: bold;">سفارش‌گیری مسافران:</span>
-      <button id="toggle-order-btn" class="btn-toggle btn-active" onclick="toggleOrderingStatus()">فعال است</button>
+      <span style="font-weight: bold; font-size: 14px;">وضعیت سفارش‌گیری مسافران:</span>
+      <button type="button" id="toggle-order-btn" class="btn-toggle btn-active" onclick="toggleOrderingStatus()">فعال است</button>
     </div>
  
     <!-- افزودن غذای جدید -->
-    <div style="font-weight: bold; margin-bottom: 8px; font-size: 15px;">افزودن دستی غذا:</div>
+    <div style="font-weight: bold; margin-bottom: 8px; font-size: 15px;">افزودن غذای جدید:</div>
     <div class="add-food-box">
-      <input type="text" id="new-food-name" placeholder="نام غذا...">
-      <button class="btn-add" onclick="addNewFood()">+ افزودن</button>
+      <input type="text" id="new-food-name" placeholder="نام غذا یا نوشیدنی جدید...">
+      <button type="button" class="btn-add" onclick="addNewFood()">+ افزودن</button>
     </div>
  
-    <!-- لیست غذاها -->
-    <div style="font-weight: bold; margin-bottom: 8px; font-size: 15px;">غذاهای فعال:</div>
+    <!-- لیست غذاهای فعلی -->
+    <div style="font-weight: bold; margin-bottom: 8px; font-size: 15px;">غذاهای فعال در منو:</div>
     <div id="manage-food-list"></div>
   </div>
 </div>
  
 <script>
-  // لینک اختصاصی اسکریپت متصل به گوگل شیت
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFBFq8mAZbz_eTXv84NUtmAL_trp0VMr6WV5qWQptKaPsxvkfuh03m8pRUSb78FZqd/exec";
  
   const defaultFoods = ["چلو گردن", "چلو کباب کوبیده", "چلو جوجه کباب", "سوپ جو", "ماست موسیر", "نوشابه"];
@@ -130,9 +129,9 @@
       row.innerHTML = `
         <span class="food-name">${item}</span>
         <div class="counter">
-          <button class="btn-count" onclick="changeQty('${item}', -1)">-</button>
+          <button type="button" class="btn-count" onclick="changeQty('${item}', -1)">-</button>
           <span class="count-display" id="qty-${item}">0</span>
-          <button class="btn-count" onclick="changeQty('${item}', 1)">+</button>
+          <button type="button" class="btn-count" onclick="changeQty('${item}', 1)">+</button>
         </div>
       `;
       listEl.appendChild(row);
@@ -225,10 +224,11 @@
     });
   }
  
-  /* توابع پنل لیدر */
+  /* توابع مجزای پنل لیدر */
   function openPasswordModal() {
     document.getElementById("password-modal").style.display = "flex";
     document.getElementById("leader-password").value = "";
+    document.getElementById("leader-password").focus();
   }
  
   function closePasswordModal() {
@@ -264,14 +264,4 @@
       const row = document.createElement("div");
       row.className = "manage-item";
       row.innerHTML = `
-        <span>${item}</span>
-        <button class="btn-del" onclick="deleteFood(${index})">حذف</button>
-      `;
-      manageListEl.appendChild(row);
-    });
-  }
- 
-  function addNewFood() {
-    const input = document.getElementById("new-food-name");
-    const name = input.value.trim();
-    if (!name) return
+        <span style="
