@@ -3,507 +3,184 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سامانه سفارش غذای گروه گردشگری چهارگاه</title>
+  <title>سامانه سفارش غذای تور چهارگاه</title>
   <style>
-    :root {
-      --primary: #1e3a8a;
-      --secondary: #059669;
-      --accent: #d97706;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text: #0f172a;
-      --border: #e2e8f0;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Tahoma", sans-serif;
-    }
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      padding-bottom: 60px;
-    }
-    header {
-      background: linear-gradient(135deg, var(--primary), #1d4ed8);
-      color: white;
-      padding: 24px 16px;
-      text-align: center;
-      border-bottom-left-radius: 20px;
-      border-bottom-right-radius: 20px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-    }
-    header h1 {
-      font-size: 1.4rem;
-      margin-bottom: 6px;
-    }
-    header p {
-      font-size: 0.95rem;
-      opacity: 0.9;
-    }
-    .container {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 0 16px;
-    }
-    .card {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      border: 1px solid var(--border);
-    }
-    label {
-      display: block;
-      font-size: 1.05rem;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    input[type="text"], input[type="password"] {
-      width: 100%;
-      padding: 14px 16px;
-      font-size: 1.1rem;
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    input[type="text"]:focus, input[type="password"]:focus {
-      border-color: var(--primary);
-    }
-    .menu-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .menu-item:last-child {
-      border-bottom: none;
-    }
-    .item-info {
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-    .counter {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .btn-counter {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      border: none;
-      background: #e2e8f0;
-      color: #0f172a;
-      font-size: 1.4rem;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .btn-counter:active {
-      transform: scale(0.95);
-    }
-    .count-val {
-      font-size: 1.25rem;
-      font-weight: bold;
-      min-width: 28px;
-      text-align: center;
-    }
-    .btn-submit {
-      width: 100%;
-      background-color: var(--secondary);
-      color: white;
-      border: none;
-      padding: 16px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      border-radius: 14px;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2);
-    }
-    .btn-submit:active {
-      background-color: #047857;
-    }
-    .admin-link {
-      text-align: center;
-      margin-top: 30px;
-    }
-    .btn-admin {
-      background: none;
-      border: 1px dashed #94a3b8;
-      color: #64748b;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .modal-content {
-      background: white;
-      padding: 24px;
-      border-radius: 16px;
-      width: 100%;
-      max-width: 550px;
-      max-height: 85vh;
-      overflow-y: auto;
-    }
-    .report-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 14px;
-    }
-    .report-table th, .report-table td {
-      border: 1px solid var(--border);
-      padding: 10px;
-      text-align: right;
-      font-size: 0.95rem;
-    }
-    .report-table th {
-      background: #f1f5f9;
-    }
-    .btn-action {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 12px 20px;
-      background: var(--primary);
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-    }
-    .success-badge {
-      display: none;
-      background: #dcfce7;
-      color: #15803d;
-      padding: 16px;
-      border-radius: 12px;
-      text-align: center;
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 18px;
-    }
+    * { box-sizing: border-box; font-family: Tahoma, Arial, sans-serif; }
+    body { background-color: #f4f6f9; margin: 0; padding: 16px; color: #333; }
+    .container { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+    h1 { font-size: 20px; text-align: center; color: #1a365d; margin-bottom: 20px; }
+    .input-group { margin-bottom: 16px; }
+    label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 15px; }
+    input[type="text"] { width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 8px; font-size: 16px; }
+    .menu-title { font-size: 17px; font-weight: bold; margin: 20px 0 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; color: #2d3748; }
+    .food-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #edf2f7; }
+    .food-name { font-size: 16px; font-weight: 500; }
+    .counter { display: flex; align-items: center; gap: 10px; }
+    .btn-count { width: 38px; height: 38px; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 20px; font-weight: bold; cursor: pointer; }
+    .count-display { font-size: 18px; font-weight: bold; min-width: 24px; text-align: center; }
+    .btn-submit { width: 100%; padding: 14px; background: #2b6cb0; color: #fff; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 24px; }
+    .btn-submit:disabled { background: #a0aec0; }
+    .leader-link { display: block; text-align: center; margin-top: 30px; font-size: 12px; color: #a0aec0; text-decoration: none; cursor: pointer; }
+    #status-msg { margin-top: 15px; text-align: center; font-size: 15px; font-weight: bold; }
   </style>
 </head>
 <body>
-
-  <header>
-    <h1>گروه گردشگری موسیقی چهارگاه</h1>
-    <p>ثبت آسان سفارش غذای مسافران</p>
-  </header>
-
-  <div class="container">
-    <div id="successMsg" class="success-badge">
-      سفارش شما با موفقیت ثبت شد. با تشکر!
-    </div>
-
-    <form id="orderForm" onsubmit="handleOrderSubmit(event)">
-      <div class="card">
-        <label for="travelerName">نام و نام خانوادگی:</label>
-        <input type="text" id="travelerName" placeholder="مثلاً: علی رضایی" required>
-      </div>
-
-      <div class="card">
-        <h3 style="margin-bottom: 12px; font-size: 1.15rem; color: var(--primary);">انتخاب اقلام غذا:</h3>
-        
-        <div class="menu-item">
-          <span class="item-info">چلو کباب کوبیده مخصوص</span>
-          <div class="counter">
-            <button type="button" class="btn-counter" onclick="changeQty('koobideh', -1)">-</button>
-            <span class="count-val" id="qty-koobideh">0</span>
-            <button type="button" class="btn-counter" onclick="changeQty('koobideh', 1)">+</button>
-          </div>
-        </div>
-
-        <div class="menu-item">
-          <span class="item-info">چلو جوجه کباب زعفرانی</span>
-          <div class="counter">
-            <button type="button" class="btn-counter" onclick="changeQty('joojeh', -1)">-</button>
-            <span class="count-val" id="qty-joojeh">0</span>
-            <button type="button" class="btn-counter" onclick="changeQty('joojeh', 1)">+</button>
-          </div>
-        </div>
-
-        <div class="menu-item">
-          <span class="item-info">زرشک پلو با مرغ مجلسی</span>
-          <div class="counter">
-            <button type="button" class="btn-counter" onclick="changeQty('zereshk', -1)">-</button>
-            <span class="count-val" id="qty-zereshk">0</span>
-            <button type="button" class="btn-counter" onclick="changeQty('zereshk', 1)">+</button>
-          </div>
-        </div>
-
-        <div class="menu-item">
-          <span class="item-info">خورش قیمه نثار / محلی</span>
-          <div class="counter">
-            <button type="button" class="btn-counter" onclick="changeQty('gheimeh', -1)">-</button>
-            <span class="count-val" id="qty-gheimeh">0</span>
-            <button type="button" class="btn-counter" onclick="changeQty('gheimeh', 1)">+</button>
-          </div>
-        </div>
-
-        <div class="menu-item">
-          <span class="item-info">ماست و خیار محلی</span>
-          <div class="counter">
-            <button type="button" class="btn-counter" onclick="changeQty('mast', -1)">-</button>
-            <span class="count-val" id="qty-mast">0</span>
-            <button type="button" class="btn-counter" onclick="changeQty('mast', 1)">+</button>
-          </div>
-        </div>
-
-        <div class="menu-item">
-          <span class="item-info">نوشیدنی (دوغ / نوشابه)</span>
-          <div class="counter">
-            <button type="button" class="btn-counter" onclick="changeQty('drink', -1)">-</button>
-            <span class="count-val" id="qty-drink">0</span>
-            <button type="button" class="btn-counter" onclick="changeQty('drink', 1)">+</button>
-          </div>
-        </div>
-      </div>
-
-      <button type="submit" class="btn-submit">ثبت نهایی سفارش</button>
-    </form>
-
-    <div class="admin-link">
-      <button class="btn-admin" onclick="openAdminLogin()">ورود لیدر تور</button>
-    </div>
+ 
+<div class="container">
+  <h1>سامانه سفارش غذای تور چهارگاه</h1>
+ 
+  <div class="input-group">
+    <label for="traveler-name">نام و نام خانوادگی همسفر:</label>
+    <input type="text" id="traveler-name" placeholder="مثال: علی رضایی">
   </div>
-
-  <!-- Modal Admin Passcode -->
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <h3>ورود مدیر تور</h3>
-      <p style="font-size: 0.9rem; color: #64748b; margin-top: 6px;">رمز ورود مدیریت را وارد کنید:</p>
-      <input type="password" id="adminPass" style="margin-top: 14px;" placeholder="رمز عبور">
-      <div style="display: flex; gap: 10px; margin-top: 16px;">
-        <button class="btn-action" onclick="checkAdminPass()">ورود</button>
-        <button class="btn-action" style="background: #94a3b8;" onclick="closeModals()">انصراف</button>
+ 
+  <div class="menu-title">لیست غذاها</div>
+ 
+  <div id="food-list">
+    <div class="food-item">
+      <span class="food-name">چلو گردن</span>
+      <div class="counter">
+        <button class="btn-count" onclick="changeQty('چلو گردن', -1)">-</button>
+        <span class="count-display" id="qty-چلو گردن">0</span>
+        <button class="btn-count" onclick="changeQty('چلو گردن', 1)">+</button>
+      </div>
+    </div>
+ 
+    <div class="food-item">
+      <span class="food-name">چلو کباب کوبیده</span>
+      <div class="counter">
+        <button class="btn-count" onclick="changeQty('چلو کباب کوبیده', -1)">-</button>
+        <span class="count-display" id="qty-چلو کباب کوبیده">0</span>
+        <button class="btn-count" onclick="changeQty('چلو کباب کوبیده', 1)">+</button>
+      </div>
+    </div>
+ 
+    <div class="food-item">
+      <span class="food-name">چلو جوجه کباب</span>
+      <div class="counter">
+        <button class="btn-count" onclick="changeQty('چلو جوجه کباب', -1)">-</button>
+        <span class="count-display" id="qty-چلو جوجه کباب">0</span>
+        <button class="btn-count" onclick="changeQty('چلو جوجه کباب', 1)">+</button>
+      </div>
+    </div>
+ 
+    <div class="food-item">
+      <span class="food-name">سوپ جو</span>
+      <div class="counter">
+        <button class="btn-count" onclick="changeQty('سوپ جو', -1)">-</button>
+        <span class="count-display" id="qty-سوپ جو">0</span>
+        <button class="btn-count" onclick="changeQty('سوپ جو', 1)">+</button>
+      </div>
+    </div>
+ 
+    <div class="food-item">
+      <span class="food-name">ماست موسیر</span>
+      <div class="counter">
+        <button class="btn-count" onclick="changeQty('ماست موسیر', -1)">-</button>
+        <span class="count-display" id="qty-ماست موسیر">0</span>
+        <button class="btn-count" onclick="changeQty('ماست موسیر', 1)">+</button>
+      </div>
+    </div>
+ 
+    <div class="food-item">
+      <span class="food-name">نوشابه</span>
+      <div class="counter">
+        <button class="btn-count" onclick="changeQty('نوشابه', -1)">-</button>
+        <span class="count-display" id="qty-نوشابه">0</span>
+        <button class="btn-count" onclick="changeQty('نوشابه', 1)">+</button>
       </div>
     </div>
   </div>
-
-  <!-- Modal Admin Dashboard -->
-  <div id="dashboardModal" class="modal">
-    <div class="modal-content">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3>پنل تجمیع سفارشات رستوران</h3>
-        <button onclick="closeModals()" style="background:none; border:none; font-size:1.4rem; cursor:pointer;">&times;</button>
-      </div>
-
-      <h4 style="margin-top: 16px; color: var(--primary);">۱. جمع کل اقلام (جهت اعلام به رستوران):</h4>
-      <table class="report-table">
-        <thead>
-          <tr>
-            <th>عنوان غذا / قلم</th>
-            <th>تعداد کل</th>
-          </tr>
-        </thead>
-        <tbody id="totalSummaryBody"></tbody>
-      </table>
-
-      <h4 style="margin-top: 20px; color: var(--primary);">۲. ریز سفارشات به تفکیک همسفران:</h4>
-      <table class="report-table">
-        <thead>
-          <tr>
-            <th>نام همسفر</th>
-            <th>اقلام و تعداد</th>
-          </tr>
-        </thead>
-        <tbody id="travelerDetailBody"></tbody>
-      </table>
-
-      <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px;">
-        <button class="btn-action" style="background: var(--secondary);" onclick="sendReportEmail()">ارسال گزارش به ایمیل (mehrba@gmail.com)</button>
-        <button class="btn-action" style="background: #ef4444;" onclick="clearAllData()">پاک‌سازی داده‌های این وعده</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const menuNames = {
-      koobideh: 'چلو کباب کوبیده مخصوص',
-      joojeh: 'چلو جوجه کباب زعفرانی',
-      zereshk: 'زرشک پلو با مرغ مجلسی',
-      gheimeh: 'خورش قیمه نثار / محلی',
-      mast: 'ماست و خیار محلی',
-      drink: 'نوشیدنی (دوغ / نوشابه)'
+ 
+  <button class="btn-submit" id="submit-btn" onclick="submitOrder()">ثبت سفارش</button>
+  <div id="status-msg"></div>
+ 
+  <span class="leader-link" onclick="openLeaderPanel()">• پنل لیدر •</span>
+</div>
+ 
+<script>
+  // لینک متصل به گوگل شیت و اسکریپت
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFBFq8mAZbz_eTXv84NUtmAL_trp0VMr6WV5qWQptKaPsxvkfuh03m8pRUSb78FZqd/exec";
+ 
+  const orders = {
+    "چلو گردن": 0,
+    "چلو کباب کوبیده": 0,
+    "چلو جوجه کباب": 0,
+    "سوپ جو": 0,
+    "ماست موسیر": 0,
+    "نوشابه": 0
+  };
+ 
+  function changeQty(foodName, delta) {
+    const current = orders[foodName] || 0;
+    const updated = Math.max(0, current + delta);
+    orders[foodName] = updated;
+    document.getElementById(`qty-${foodName}`).innerText = updated;
+  }
+ 
+  function submitOrder() {
+    const name = document.getElementById("traveler-name").value.trim();
+    const statusMsg = document.getElementById("status-msg");
+    const submitBtn = document.getElementById("submit-btn");
+ 
+    if (!name) {
+      alert("لطفاً نام و نام خانوادگی خود را بنویسید.");
+      return;
+    }
+ 
+    const selectedItems = [];
+    for (const [item, count] of Object.entries(orders)) {
+      if (count > 0) {
+        selectedItems.push(`${item} (${count} عدد)`);
+      }
+    }
+ 
+    if (selectedItems.length === 0) {
+      alert("لطفاً حداقل یک غذا انتخاب کنید.");
+      return;
+    }
+ 
+    submitBtn.disabled = true;
+    statusMsg.style.color = "#2b6cb0";
+    statusMsg.innerText = "در حال ثبت سفارش...";
+ 
+    const payload = {
+      name: name,
+      order: selectedItems.join("، ")
     };
-
-    let currentOrder = {
-      koobideh: 0,
-      joojeh: 0,
-      zereshk: 0,
-      gheimeh: 0,
-      mast: 0,
-      drink: 0
-    };
-
-    function changeQty(key, delta) {
-      currentOrder[key] = Math.max(0, currentOrder[key] + delta);
-      document.getElementById('qty-' + key).innerText = currentOrder[key];
+ 
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .then(() => {
+      statusMsg.style.color = "green";
+      statusMsg.innerText = "سفارش شما با موفقیت ثبت شد!";
+      document.getElementById("traveler-name").value = "";
+      for (const item of Object.keys(orders)) {
+        orders[item] = 0;
+        document.getElementById(`qty-${item}`).innerText = "0";
+      }
+      submitBtn.disabled = false;
+    })
+    .catch((err) => {
+      statusMsg.style.color = "red";
+      statusMsg.innerText = "خطا در ثبت سفارش. لطفاً دوباره تلاش کنید.";
+      submitBtn.disabled = false;
+    });
+  }
+ 
+  function openLeaderPanel() {
+    const pass = prompt("رمز ورود لیدر را وارد کنید:");
+    if (pass === "1234") {
+      alert("ورود تایید شد. شیت سفارش‌ها در اکانت گوگل شما فعال است.");
+    } else if (pass !== null) {
+      alert("رمز اشتباه است.");
     }
-
-    function handleOrderSubmit(e) {
-      e.preventDefault();
-      const name = document.getElementById('travelerName').value.trim();
-      
-      const totalItems = Object.values(currentOrder).reduce((a, b) => a + b, 0);
-      if (totalItems === 0) {
-        alert('لطفاً حداقل یک قلم غذا انتخاب کنید.');
-        return;
-      }
-
-      const orderData = {
-        name: name,
-        items: { ...currentOrder },
-        date: new Date().toLocaleTimeString('fa-IR')
-      };
-
-      let allOrders = JSON.parse(localStorage.getItem('chahargah_orders') || '[]');
-      allOrders.push(orderData);
-      localStorage.setItem('chahargah_orders', JSON.stringify(allOrders));
-
-      // Reset Form
-      document.getElementById('travelerName').value = '';
-      for (let k in currentOrder) {
-        currentOrder[k] = 0;
-        document.getElementById('qty-' + k).innerText = '0';
-      }
-
-      const successBadge = document.getElementById('successMsg');
-      successBadge.style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setTimeout(() => {
-        successBadge.style.display = 'none';
-      }, 5000);
-    }
-
-    function openAdminLogin() {
-      document.getElementById('loginModal').style.display = 'flex';
-      document.getElementById('adminPass').value = '';
-      document.getElementById('adminPass').focus();
-    }
-
-    function closeModals() {
-      document.getElementById('loginModal').style.display = 'none';
-      document.getElementById('dashboardModal').style.display = 'none';
-    }
-
-    function checkAdminPass() {
-      const pass = document.getElementById('adminPass').value;
-      if (pass === '1234') {
-        document.getElementById('loginModal').style.display = 'none';
-        loadDashboardData();
-        document.getElementById('dashboardModal').style.display = 'flex';
-      } else {
-        alert('رمز ورود اشتباه است.');
-      }
-    }
-
-    function loadDashboardData() {
-      const orders = JSON.parse(localStorage.getItem('chahargah_orders') || '[]');
-      
-      // Calculate Totals
-      const totals = {};
-      for (let key in menuNames) totals[key] = 0;
-
-      const detailBody = document.getElementById('travelerDetailBody');
-      detailBody.innerHTML = '';
-
-      if (orders.length === 0) {
-        detailBody.innerHTML = '<tr><td colspan="2" style="text-align:center;">هنوز سفارشی ثبت نشده است.</td></tr>';
-      }
-
-      orders.forEach(ord => {
-        let itemsList = [];
-        for (let k in ord.items) {
-          if (ord.items[k] > 0) {
-            totals[k] += ord.items[k];
-            itemsList.push(`${menuNames[k]} (${ord.items[k]})`);
-          }
-        }
-        const row = document.createElement('tr');
-        row.innerHTML = `<td><strong>${ord.name}</strong></td><td>${itemsList.join(' ، ')}</td>`;
-        detailBody.appendChild(row);
-      });
-
-      // Render Totals
-      const totalBody = document.getElementById('totalSummaryBody');
-      totalBody.innerHTML = '';
-      for (let k in totals) {
-        if (totals[k] > 0) {
-          const row = document.createElement('tr');
-          row.innerHTML = `<td>${menuNames[k]}</td><td><strong>${totals[k]} عدد</strong></td>`;
-          totalBody.appendChild(row);
-        }
-      }
-      if (totalBody.innerHTML === '') {
-        totalBody.innerHTML = '<tr><td colspan="2" style="text-align:center;">هیچ غذایی سفارش داده نشده است.</td></tr>';
-      }
-    }
-
-    function sendReportEmail() {
-      const orders = JSON.parse(localStorage.getItem('chahargah_orders') || '[]');
-      if (orders.length === 0) {
-        alert('داده‌ای برای ارسال وجود ندارد.');
-        return;
-      }
-
-      const totals = {};
-      for (let key in menuNames) totals[key] = 0;
-
-      let detailText = "--- ریز سفارش همسفران ---\n";
-      orders.forEach(o => {
-        let line = `${o.name}: `;
-        let items = [];
-        for (let k in o.items) {
-          if (o.items[k] > 0) {
-            totals[k] += o.items[k];
-            items.push(`${menuNames[k]} (${o.items[k]} عدد)`);
-          }
-        }
-        detailText += line + items.join(" - ") + "\n";
-      });
-
-      let summaryText = "--- جمع کل اقلام برای رستوران ---\n";
-      for (let k in totals) {
-        if (totals[k] > 0) {
-          summaryText += `${menuNames[k]}: ${totals[k]} عدد\n`;
-        }
-      }
-
-      const emailSubject = encodeURIComponent("لیست تجمیعی سفارش غذای گروه گردشگری چهارگاه");
-      const emailBody = encodeURIComponent(summaryText + "\n" + detailText);
-
-      window.location.href = `mailto:mehrba@gmail.com?subject=${emailSubject}&body=${emailBody}`;
-    }
-
-    function clearAllData() {
-      if (confirm('آیا از پاک کردن تمامی سفارش‌های ثبت‌شده برای این وعده اطمینان دارید؟')) {
-        localStorage.removeItem('chahargah_orders');
-        loadDashboardData();
-      }
-    }
-  </script>
+  }
+</script>
+ 
 </body>
 </html>
