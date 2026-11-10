@@ -21,12 +21,12 @@
     .count-display { font-size: 18px; font-weight: bold; min-width: 24px; text-align: center; }
     .btn-submit { width: 100%; padding: 14px; background: #2b6cb0; color: #fff; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 24px; }
     .btn-submit:disabled { background: #a0aec0; cursor: not-allowed; }
-    .leader-link { display: block; text-align: center; margin-top: 35px; font-size: 13px; color: #718096; text-decoration: underline; cursor: pointer; }
+    .leader-btn { display: block; width: 100%; text-align: center; margin-top: 30px; padding: 10px; background: #edf2f7; color: #4a5568; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; border: 1px solid #cbd5e0; }
     #status-msg { margin-top: 15px; text-align: center; font-size: 15px; font-weight: bold; }
  
-    /* پنجره‌های پاپ‌آپ مدیریت */
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 9999; justify-content: center; align-items: center; padding: 16px; }
-    .modal-box { background: #fff; width: 100%; max-width: 440px; border-radius: 12px; padding: 22px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    /* پاپ‌آپ‌ها */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 99999; justify-content: center; align-items: center; padding: 16px; }
+    .modal-box { background: #fff; width: 100%; max-width: 440px; border-radius: 12px; padding: 22px; max-height: 85vh; overflow-y: auto; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 16px; }
     .btn-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #718096; font-weight: bold; }
     .toggle-box { display: flex; justify-content: space-between; align-items: center; background: #edf2f7; padding: 12px; border-radius: 8px; margin-bottom: 20px; }
@@ -53,15 +53,67 @@
   </div>
  
   <div class="menu-title">لیست غذاها</div>
-  <div id="food-list"></div>
+  
+  <!-- لیست قطعی و ثابت غذاها -->
+  <div id="food-list">
+    <div class="food-item" id="item-چلو گردن">
+      <span class="food-name">چلو گردن</span>
+      <div class="counter">
+        <button type="button" class="btn-count" onclick="changeQty('چلو گردن', -1)">-</button>
+        <span class="count-display" id="qty-چلو گردن">0</span>
+        <button type="button" class="btn-count" onclick="changeQty('چلو گردن', 1)">+</button>
+      </div>
+    </div>
+    <div class="food-item" id="item-چلو کباب کوبیده">
+      <span class="food-name">چلو کباب کوبیده</span>
+      <div class="counter">
+        <button type="button" class="btn-count" onclick="changeQty('چلو کباب کوبیده', -1)">-</button>
+        <span class="count-display" id="qty-چلو کباب کوبیده">0</span>
+        <button type="button" class="btn-count" onclick="changeQty('چلو کباب کوبیده', 1)">+</button>
+      </div>
+    </div>
+    <div class="food-item" id="item-چلو جوجه کباب">
+      <span class="food-name">چلو جوجه کباب</span>
+      <div class="counter">
+        <button type="button" class="btn-count" onclick="changeQty('چلو جوجه کباب', -1)">-</button>
+        <span class="count-display" id="qty-چلو جوجه کباب">0</span>
+        <button type="button" class="btn-count" onclick="changeQty('چلو جوجه کباب', 1)">+</button>
+      </div>
+    </div>
+    <div class="food-item" id="item-سوپ جو">
+      <span class="food-name">سوپ جو</span>
+      <div class="counter">
+        <button type="button" class="btn-count" onclick="changeQty('سوپ جو', -1)">-</button>
+        <span class="count-display" id="qty-سوپ جو">0</span>
+        <button type="button" class="btn-count" onclick="changeQty('سوپ جو', 1)">+</button>
+      </div>
+    </div>
+    <div class="food-item" id="item-ماست موسیر">
+      <span class="food-name">ماست موسیر</span>
+      <div class="counter">
+        <button type="button" class="btn-count" onclick="changeQty('ماست موسیر', -1)">-</button>
+        <span class="count-display" id="qty-ماست موسیر">0</span>
+        <button type="button" class="btn-count" onclick="changeQty('ماست موسیر', 1)">+</button>
+      </div>
+    </div>
+    <div class="food-item" id="item-نوشابه">
+      <span class="food-name">نوشابه</span>
+      <div class="counter">
+        <button type="button" class="btn-count" onclick="changeQty('نوشابه', -1)">-</button>
+        <span class="count-display" id="qty-نوشابه">0</span>
+        <button type="button" class="btn-count" onclick="changeQty('نوشابه', 1)">+</button>
+      </div>
+    </div>
+  </div>
  
   <button type="button" class="btn-submit" id="submit-btn" onclick="submitOrder()">ثبت سفارش</button>
   <div id="status-msg"></div>
  
-  <span class="leader-link" onclick="openPasswordModal()">• ورود به پنل لیدر •</span>
+  <!-- دکمه ورود به پنل لیدر -->
+  <button type="button" class="leader-btn" onclick="openPasswordModal()">⚙️ ورود به پنل مدیریت لیدر</button>
 </div>
  
-<!-- پاپ‌آپ رمز ورود لیدر -->
+<!-- پنجره رمز عبور -->
 <div id="password-modal" class="modal-overlay">
   <div class="modal-box">
     <div class="modal-header">
@@ -76,29 +128,26 @@
   </div>
 </div>
  
-<!-- پاپ‌آپ اصلی پنل مدیریت لیدر -->
+<!-- پنجره پنل مدیریت لیدر -->
 <div id="leader-modal" class="modal-overlay">
   <div class="modal-box">
     <div class="modal-header">
-      <h3 style="margin:0; font-size: 18px;">مدیریت رستوران و منوی غذا</h3>
+      <h3 style="margin:0; font-size: 18px;">مدیریت رستوران و منو</h3>
       <button type="button" class="btn-close" onclick="closeLeaderModal()">✕</button>
     </div>
  
-    <!-- وضعیت باز/بسته بودن سفارشات -->
     <div class="toggle-box">
       <span style="font-weight: bold; font-size: 14px;">وضعیت سفارش‌گیری مسافران:</span>
       <button type="button" id="toggle-order-btn" class="btn-toggle btn-active" onclick="toggleOrderingStatus()">فعال است</button>
     </div>
  
-    <!-- افزودن غذای جدید -->
     <div style="font-weight: bold; margin-bottom: 8px; font-size: 15px;">افزودن غذای جدید:</div>
     <div class="add-food-box">
-      <input type="text" id="new-food-name" placeholder="نام غذا یا نوشیدنی جدید...">
+      <input type="text" id="new-food-name" placeholder="نام غذای جدید...">
       <button type="button" class="btn-add" onclick="addNewFood()">+ افزودن</button>
     </div>
  
-    <!-- لیست غذاهای فعلی -->
-    <div style="font-weight: bold; margin-bottom: 8px; font-size: 15px;">غذاهای فعال در منو:</div>
+    <div style="font-weight: bold; margin-bottom: 8px; font-size: 15px;">غذاهای فعال:</div>
     <div id="manage-food-list"></div>
   </div>
 </div>
@@ -106,44 +155,20 @@
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFBFq8mAZbz_eTXv84NUtmAL_trp0VMr6WV5qWQptKaPsxvkfuh03m8pRUSb78FZqd/exec";
  
-  const defaultFoods = ["چلو گردن", "چلو کباب کوبیده", "چلو جوجه کباب", "سوپ جو", "ماست موسیر", "نوشابه"];
- 
-  let foodItems = JSON.parse(localStorage.getItem("tour_menu")) || defaultFoods;
-  let isOrderingActive = localStorage.getItem("tour_ordering_active") !== "false";
+  let foodList = ["چلو گردن", "چلو کباب کوبیده", "چلو جوجه کباب", "سوپ جو", "ماست موسیر", "نوشابه"];
   let orders = {};
+  let isOrderingActive = true;
  
-  function initApp() {
-    renderMenu();
-    updateOrderStatusUI();
-  }
- 
-  function renderMenu() {
-    const listEl = document.getElementById("food-list");
-    listEl.innerHTML = "";
-    orders = {};
- 
-    foodItems.forEach(item => {
-      orders[item] = 0;
-      const row = document.createElement("div");
-      row.className = "food-item";
-      row.innerHTML = `
-        <span class="food-name">${item}</span>
-        <div class="counter">
-          <button type="button" class="btn-count" onclick="changeQty('${item}', -1)">-</button>
-          <span class="count-display" id="qty-${item}">0</span>
-          <button type="button" class="btn-count" onclick="changeQty('${item}', 1)">+</button>
-        </div>
-      `;
-      listEl.appendChild(row);
-    });
-  }
+  // مقداردهی اولیه
+  foodList.forEach(item => { orders[item] = 0; });
  
   function changeQty(foodName, delta) {
     if (!isOrderingActive) return;
     const current = orders[foodName] || 0;
     const updated = Math.max(0, current + delta);
     orders[foodName] = updated;
-    document.getElementById(`qty-${foodName}`).innerText = updated;
+    const el = document.getElementById("qty-" + foodName);
+    if (el) el.innerText = updated;
   }
  
   function updateOrderStatusUI() {
@@ -186,7 +211,7 @@
     const selectedItems = [];
     for (const [item, count] of Object.entries(orders)) {
       if (count > 0) {
-        selectedItems.push(`${item} (${count} عدد)`);
+        selectedItems.push(item + " (" + count + " عدد)");
       }
     }
  
@@ -212,56 +237,4 @@
     })
     .then(() => {
       statusMsg.style.color = "green";
-      statusMsg.innerText = "سفارش شما با موفقیت ثبت شد!";
-      document.getElementById("traveler-name").value = "";
-      renderMenu();
-      submitBtn.disabled = false;
-    })
-    .catch(() => {
-      statusMsg.style.color = "red";
-      statusMsg.innerText = "خطا در ثبت سفارش. لطفاً دوباره تلاش کنید.";
-      submitBtn.disabled = false;
-    });
-  }
- 
-  /* توابع مجزای پنل لیدر */
-  function openPasswordModal() {
-    document.getElementById("password-modal").style.display = "flex";
-    document.getElementById("leader-password").value = "";
-    document.getElementById("leader-password").focus();
-  }
- 
-  function closePasswordModal() {
-    document.getElementById("password-modal").style.display = "none";
-  }
- 
-  function checkLeaderPassword() {
-    const entered = document.getElementById("leader-password").value;
-    if (entered === "1234") {
-      closePasswordModal();
-      document.getElementById("leader-modal").style.display = "flex";
-      renderManageList();
-      updateOrderStatusUI();
-    } else {
-      alert("رمز عبور اشتباه است.");
-    }
-  }
- 
-  function closeLeaderModal() {
-    document.getElementById("leader-modal").style.display = "none";
-  }
- 
-  function toggleOrderingStatus() {
-    isOrderingActive = !isOrderingActive;
-    localStorage.setItem("tour_ordering_active", isOrderingActive);
-    updateOrderStatusUI();
-  }
- 
-  function renderManageList() {
-    const manageListEl = document.getElementById("manage-food-list");
-    manageListEl.innerHTML = "";
-    foodItems.forEach((item, index) => {
-      const row = document.createElement("div");
-      row.className = "manage-item";
-      row.innerHTML = `
-        <span style="
+      statusMsg.innerText = "سف
