@@ -4,56 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>سامانه سفارش غذا | گروه گردشگری چهارگاه</title>
-  <!-- فونت وزیرمتن -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- آیکون‌های Phosphor -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Vazirmatn', 'sans-serif'],
-          },
+          fontFamily: { sans: ['Vazirmatn', 'sans-serif'] },
           colors: {
-            brand: {
-              50: '#fdf8f4',
-              100: '#f9eee4',
-              500: '#e07a22',
-              600: '#c56112',
-              700: '#a3480b',
-            }
+            brand: { 50: '#fdf8f4', 100: '#f9eee4', 500: '#e07a22', 600: '#c56112', 700: '#a3480b' }
           }
         }
       }
     }
   </script>
   <style>
-    body {
-      font-family: 'Vazirmatn', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-    input, textarea {
-      user-select: text;
-    }
-    ::-webkit-scrollbar {
-      width: 4px;
-      height: 4px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 999px;
-    }
+    body { font-family: 'Vazirmatn', sans-serif; -webkit-tap-highlight-color: transparent; }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
-  <!-- هدر -->
+  <!-- نوار هدر -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
     <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center space-x-2 space-x-reverse">
@@ -63,11 +39,14 @@
         <div>
           <h1 class="text-sm font-bold text-slate-900 leading-tight">گروه گردشگری چهارگاه</h1>
           <p class="text-[11px] text-amber-600 font-semibold flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            سامانه سفارش آنلاین غذا
+            <span id="syncDot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="syncText">سامانه آنلاین سفارش غذا</span>
           </p>
         </div>
       </div>
+      <button onclick="fetchOnlineMenu(true)" title="بروزرسانی منو" class="text-slate-500 hover:text-amber-600 p-2 text-lg active:rotate-180 transition-transform duration-300">
+        <i class="ph-bold ph-arrows-clockwise"></i>
+      </button>
     </div>
   </header>
 
@@ -77,11 +56,11 @@
     <!-- نمای مسافر -->
     <div id="passengerView" class="space-y-4">
       
-      <!-- نام رستوران انتخابی -->
+      <!-- بنر رستوران -->
       <div class="bg-gradient-to-l from-amber-500 to-orange-600 text-white p-4 rounded-2xl shadow-sm relative overflow-hidden">
         <div class="relative z-10">
-          <span class="text-xs font-light text-amber-100 uppercase tracking-wide">رستوران منتخب تور:</span>
-          <h2 id="activeRestaurantTitle" class="text-lg font-extrabold mt-0.5">در حال بارگذاری...</h2>
+          <span class="text-xs font-light text-amber-100">رستوران منتخب تور:</span>
+          <h2 id="activeRestaurantTitle" class="text-lg font-extrabold mt-0.5">در حال بارگذاری منو...</h2>
           <p id="activeRestaurantDesc" class="text-xs text-amber-100 mt-1 opacity-90"></p>
         </div>
         <i class="ph ph-fork-knife absolute -left-2 -bottom-3 text-7xl text-white/10 pointer-events-none"></i>
@@ -98,7 +77,7 @@
                class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition" />
       </div>
 
-      <!-- تب‌های منو -->
+      <!-- تب‌های دسته‌بندی منو -->
       <div class="bg-slate-200/70 p-1 rounded-xl flex items-center justify-between text-xs font-bold text-slate-600">
         <button type="button" onclick="changeCategory('main')" id="tab-main" class="flex-1 py-2 rounded-lg transition-all text-center flex items-center justify-center gap-1 bg-white text-amber-600 shadow-sm">
           <i class="ph-bold ph-bowl-food text-sm"></i>
@@ -114,20 +93,20 @@
         </button>
       </div>
 
-      <!-- لیست آیتم‌ها -->
+      <!-- لیست غذاها -->
       <div id="foodList" class="space-y-2.5 min-h-[180px]"></div>
 
-      <!-- توضیحات یا حساسیت غذایی -->
+      <!-- توضیحات -->
       <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200/80">
         <label for="orderNotes" class="block text-xs font-semibold text-slate-600 mb-1 flex items-center gap-1">
           <i class="ph-bold ph-chat-teardrop-text text-amber-600"></i>
           توضیحات یا درخواست خاص (اختیاری):
         </label>
-        <input type="text" id="orderNotes" placeholder="مثلاً: بدون پیاز، سس بیشتر یا ..." 
+        <input type="text" id="orderNotes" placeholder="مثلاً: بدون پیاز، کم‌نمک یا ..." 
                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition" />
       </div>
 
-      <!-- دکمه ثبت سفارش -->
+      <!-- دکمه ثبت -->
       <div class="pt-2">
         <button id="submitOrderBtn" onclick="submitOrder()" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white py-3.5 px-4 rounded-2xl font-bold shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 transition duration-200">
           <i class="ph-bold ph-check-circle text-xl"></i>
@@ -146,7 +125,7 @@
     </div>
 
     <!-- پنل تورلیدر -->
-    <div id="leaderView" class="hidden space-y-5">
+    <div id="leaderView" class="hidden space-y-4">
       <div class="flex items-center justify-between bg-slate-900 text-white p-4 rounded-2xl shadow-sm">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-slate-950 font-bold">
@@ -154,31 +133,42 @@
           </div>
           <div>
             <h3 class="font-bold text-sm">پنل مدیریت تورلیدر</h3>
-            <p class="text-[10px] text-slate-400">تنظیم منو، رستوران فعال و گوگل شیت</p>
+            <p class="text-[10px] text-slate-400">تنظیمات رستوران‌ها، غذاها و همگام‌سازی شیت</p>
           </div>
         </div>
         <button onclick="exitLeaderPanel()" class="text-xs bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-rose-200 px-3 py-1.5 rounded-lg border border-slate-700 transition flex items-center gap-1">
-          <i class="ph-bold ph-sign-out"></i>
-          خروج
+          <i class="ph-bold ph-sign-out"></i> خروج
         </button>
       </div>
 
+      <!-- دکمه همگام‌سازی فوری با شیت -->
+      <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-2xl flex items-center justify-between">
+        <div>
+          <div class="text-xs font-bold text-emerald-900">همگام‌سازی با شیت مسافران</div>
+          <div class="text-[10px] text-emerald-700">ارسال منوی این گوشی به شیت آنلاین</div>
+        </div>
+        <button onclick="pushMenuToSheet()" id="pushSheetBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1 shadow-sm">
+          <i class="ph-bold ph-cloud-arrow-up text-sm"></i>
+          ارسال به شیت مسافران
+        </button>
+      </div>
+
+      <!-- تب‌های لیدر -->
       <div class="grid grid-cols-3 gap-1 bg-slate-200 p-1 rounded-xl text-xs font-bold text-slate-700">
         <button onclick="switchLeaderTab('restaurants')" id="ltab-restaurants" class="py-2 rounded-lg bg-white text-slate-900 shadow-sm text-center">رستوران‌ها</button>
         <button onclick="switchLeaderTab('menu')" id="ltab-menu" class="py-2 rounded-lg text-center hover:bg-white/60">منوی غذاها</button>
-        <button onclick="switchLeaderTab('sheet')" id="ltab-sheet" class="py-2 rounded-lg text-center hover:bg-white/60">اتصال شیت</button>
+        <button onclick="switchLeaderTab('sheet')" id="ltab-sheet" class="py-2 rounded-lg text-center hover:bg-white/60">تنظیمات شیت</button>
       </div>
 
       <!-- تب رستوران‌ها -->
       <div id="leaderSection-restaurants" class="space-y-4">
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
           <h4 class="text-xs font-bold text-slate-800 mb-3 flex items-center gap-1.5">
-            <i class="ph-bold ph-plus-circle text-amber-600"></i>
-            افزودن نام رستوران جدید:
+            <i class="ph-bold ph-plus-circle text-amber-600"></i> افزودن نام رستوران جدید:
           </h4>
           <div class="space-y-2">
             <input type="text" id="newRestName" placeholder="نام رستوران (مثلاً: رستوران سنتی دربند)" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
-            <input type="text" id="newRestDesc" placeholder="توضیح یا نشانی کوتاه (مثلاً: ناهار روز اول)" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+            <input type="text" id="newRestDesc" placeholder="توضیح کوتاه (مثلاً: وعده ناهار روز اول)" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
             <button onclick="addNewRestaurant()" class="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2.5 rounded-xl transition">
               ثبت رستوران
             </button>
@@ -201,71 +191,45 @@
 
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
           <h4 class="text-xs font-bold text-slate-800 mb-3 flex items-center gap-1.5">
-            <i class="ph-bold ph-plus-circle text-emerald-600"></i>
-            افزودن آیتم جدید به منو:
+            <i class="ph-bold ph-plus-circle text-emerald-600"></i> افزودن آیتم جدید به منو:
           </h4>
           <div class="space-y-2.5">
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-600 mb-1">دسته‌بندی:</label>
-              <div class="grid grid-cols-3 gap-1">
-                <label class="cursor-pointer text-center text-xs p-2 rounded-lg border border-slate-200 has-[:checked]:bg-amber-500 has-[:checked]:text-white has-[:checked]:border-amber-500">
-                  <input type="radio" name="newItemCategory" value="main" class="hidden" checked> غذای اصلی
-                </label>
-                <label class="cursor-pointer text-center text-xs p-2 rounded-lg border border-slate-200 has-[:checked]:bg-amber-500 has-[:checked]:text-white has-[:checked]:border-amber-500">
-                  <input type="radio" name="newItemCategory" value="appetizer" class="hidden"> پیش‌غذا
-                </label>
-                <label class="cursor-pointer text-center text-xs p-2 rounded-lg border border-slate-200 has-[:checked]:bg-amber-500 has-[:checked]:text-white has-[:checked]:border-amber-500">
-                  <input type="radio" name="newItemCategory" value="drink" class="hidden"> نوشیدنی
-                </label>
-              </div>
+            <div class="grid grid-cols-3 gap-1">
+              <label class="cursor-pointer text-center text-xs p-2 rounded-lg border border-slate-200 has-[:checked]:bg-amber-500 has-[:checked]:text-white">
+                <input type="radio" name="newItemCategory" value="main" class="hidden" checked> غذای اصلی
+              </label>
+              <label class="cursor-pointer text-center text-xs p-2 rounded-lg border border-slate-200 has-[:checked]:bg-amber-500 has-[:checked]:text-white">
+                <input type="radio" name="newItemCategory" value="appetizer" class="hidden"> پیش‌غذا
+              </label>
+              <label class="cursor-pointer text-center text-xs p-2 rounded-lg border border-slate-200 has-[:checked]:bg-amber-500 has-[:checked]:text-white">
+                <input type="radio" name="newItemCategory" value="drink" class="hidden"> نوشیدنی
+              </label>
             </div>
-            <input type="text" id="newFoodName" placeholder="نام غذا (مثلاً: چلوکباب کوبیده مخصوص)" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
-            <input type="text" id="newFoodPrice" placeholder="قیمت (مثلاً: ۲۸۰,۰۰۰ تومان یا اختیاری)" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+            <input type="text" id="newFoodName" placeholder="نام آیتم غذا یا نوشیدنی" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+            <input type="text" id="newFoodPrice" placeholder="قیمت (مثلاً: ۲۸۰,۰۰۰ تومان)" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
             <button onclick="addNewFoodItem()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 rounded-xl transition">
-              افزودن به منوی رستوران
+              افزودن به منو
             </button>
           </div>
         </div>
 
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-          <h4 class="text-xs font-bold text-slate-800 mb-3">آیتم‌های ثبت‌شده برای این رستوران:</h4>
-          <div id="leaderFoodsList" class="space-y-2"></div>
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="text-xs font-bold text-slate-800">آیتم‌های ثبت‌شده:</h4>
+            <span id="foodCountBadge" class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold"></span>
+          </div>
+          <div id="leaderFoodsList" class="space-y-2 max-h-96 overflow-y-auto"></div>
         </div>
       </div>
 
       <!-- تب اتصال شیت -->
       <div id="leaderSection-sheet" class="hidden space-y-4">
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-          <div class="flex items-center gap-2 text-emerald-700 font-bold text-xs">
-            <i class="ph-bold ph-file-csv text-xl"></i>
-            تنظیم اتصال وب‌هوک Google Sheet
-          </div>
-          <label class="block text-xs font-semibold text-slate-700">لینک وب‌اپلیکیشن گوگل (Web App URL):</label>
-          <input type="url" id="googleSheetWebhookUrl" placeholder="https://script.google.com/macros/s/.../exec" 
-                 class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono text-left focus:ring-2 focus:ring-amber-500 focus:outline-none">
-          <div class="flex gap-2">
-            <button onclick="saveSheetUrl()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2.5 rounded-xl transition">
-              ذخیره لینک شیت
-            </button>
-            <button onclick="testSheetConnection()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition">
-              تست ارسال آزمایشی
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-amber-50 border border-amber-200 p-4 rounded-2xl text-xs space-y-2">
-          <div class="font-bold text-amber-900 flex items-center gap-1.5">
-            <i class="ph-bold ph-download-simple text-base"></i>
-            پشتیبان آفلاین سفارش‌ها:
-          </div>
-          <div class="flex gap-2 pt-1">
-            <button onclick="exportOrdersToCSV()" class="bg-white border border-amber-300 text-amber-900 font-bold px-3 py-2 rounded-xl text-xs hover:bg-amber-100/50">
-              دانلود فایل اکسل سفارش‌ها
-            </button>
-            <button onclick="clearOrdersHistory()" class="text-rose-600 px-3 py-2 rounded-xl text-xs hover:bg-rose-50">
-              پاکسازی حافظه
-            </button>
-          </div>
+          <label class="block text-xs font-semibold text-slate-700">لینک وب‌اپلیکیشن گوگل:</label>
+          <input type="url" id="googleSheetWebhookUrl" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono text-left focus:ring-2 focus:ring-amber-500 focus:outline-none">
+          <button onclick="saveSheetUrl()" class="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2.5 rounded-xl transition">
+            ذخیره لینک شیت
+          </button>
         </div>
       </div>
 
@@ -273,76 +237,61 @@
   </main>
 
   <footer class="py-3 text-center text-[11px] text-slate-400 border-t border-slate-200 bg-white">
-    گروه گردشگری چهارگاه &copy; سامانه سفارش غذای تور
+    گروه گردشگری چهارگاه &copy; سامانه سفارش آنلاین غذای تور
   </footer>
 
-  <!-- مودال پیام‌ها -->
+  <!-- مودال پیام -->
   <div id="customAlertModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-xs rounded-2xl p-5 shadow-2xl text-center space-y-3">
       <div id="alertIconBox" class="w-12 h-12 rounded-full mx-auto flex items-center justify-center text-2xl"></div>
       <h3 id="alertTitle" class="font-extrabold text-sm text-slate-800"></h3>
       <p id="alertMessage" class="text-xs text-slate-500 leading-relaxed"></p>
-      <button onclick="closeModal('customAlertModal')" class="w-full bg-amber-600 text-white font-bold py-2 rounded-xl text-xs">
-        تأیید
-      </button>
+      <button onclick="closeModal('customAlertModal')" class="w-full bg-amber-600 text-white font-bold py-2 rounded-xl text-xs">تأیید</button>
     </div>
   </div>
 
-  <!-- مودال رمز لیدر -->
+  <!-- مودال لاگین -->
   <div id="loginModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-xs rounded-2xl p-5 shadow-2xl space-y-3 text-center">
       <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 mx-auto flex items-center justify-center text-xl">
         <i class="ph-bold ph-lock"></i>
       </div>
       <h3 class="font-extrabold text-sm text-slate-800">ورود تورلیدر</h3>
-      <p class="text-[11px] text-slate-500">رمز عبور اختصاصی خود را وارد نمایید:</p>
       <input type="password" id="leaderPassInput" placeholder="رمز ۴ رقمی" maxlength="8"
              class="w-full text-center tracking-widest text-lg font-bold bg-slate-50 border border-slate-300 rounded-xl py-2 focus:ring-2 focus:ring-amber-500 focus:outline-none">
       <div class="flex gap-2 pt-2">
-        <button onclick="verifyLeaderPassword()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 rounded-xl text-xs transition">
-          ورود به پنل
-        </button>
-        <button onclick="closeModal('loginModal')" class="bg-slate-200 text-slate-600 font-bold px-3 py-2 rounded-xl text-xs">
-          انصراف
-        </button>
+        <button onclick="verifyLeaderPassword()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 rounded-xl text-xs">ورود</button>
+        <button onclick="closeModal('loginModal')" class="bg-slate-200 text-slate-600 font-bold px-3 py-2 rounded-xl text-xs">انصراف</button>
       </div>
     </div>
   </div>
 
-  <!-- اسکریپت برنامه -->
   <script>
     const LEADER_PIN = "1234";
     let GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbx4CIYZJyHyhnshlv-mHdDWYFfpSu7mHojqhJq-2ViJitB-HAuzDD2LLGs5-WObdQY3yw/exec"; 
 
-    const initialData = {
+    const defaultData = {
       activeRestaurantId: "rest_1",
       sheetWebhook: GOOGLE_SHEET_URL,
       restaurants: [
-        { id: "rest_1", name: "رستوران سنتی و باغ بهشت", desc: "منوی ناهار روز اول تور", isActive: true },
-        { id: "rest_2", name: "رستوران کوهستان", desc: "منوی شام", isActive: false }
+        { id: "rest_1", name: "رستوران سنتی و باغ بهشت", desc: "منوی ناهار روز اول", isActive: true }
       ],
       foods: [
-        { id: "f1", restId: "rest_1", name: "چلو جوجه‌کباب مخصوص با برنج ایرانی", price: "۲۸۵,۰۰۰ تومان", category: "main" },
-        { id: "f2", restId: "rest_1", name: "چلو کباب کوبیده زعفرانی (۲ سیخ)", price: "۳۱۰,۰۰۰ تومان", category: "main" },
-        { id: "f3", restId: "rest_1", name: "زرشک‌پلو با مرغ سسی مجلسی", price: "۲۴۰,۰۰۰ تومان", category: "main" },
-        { id: "f4", restId: "rest_1", name: "چلو خورشت قورمه‌سبزی جاافتاده", price: "۲۲۰,۰۰۰ تومان", category: "main" },
-        { id: "f5", restId: "rest_1", name: "سوپ جو مخصوص رستوران", price: "۶۵,۰۰۰ تومان", category: "appetizer" },
-        { id: "f6", restId: "rest_1", name: "ماست موسیر کوزه‌ای", price: "۴۵,۰۰۰ تومان", category: "appetizer" },
-        { id: "f7", restId: "rest_1", name: "سالاد شیرازی تازه", price: "۴۰,۰۰۰ تومان", category: "appetizer" },
-        { id: "f8", restId: "rest_1", name: "دوغ محلی نعناعی پارچی", price: "۳۵,۰۰۰ تومان", category: "drink" },
-        { id: "f9", restId: "rest_1", name: "نوشابه قوطی (کوکاکولا / فانتا)", price: "۳۰,۰۰۰ تومان", category: "drink" },
-        { id: "f10", restId: "rest_1", name: "آب‌معدنی کوچک", price: "۱۵,۰۰۰ تومان", category: "drink" }
-      ],
-      ordersHistory: []
+        { id: "f1", restId: "rest_1", name: "چلو جوجه‌کباب مخصوص", price: "۲۸۵,۰۰۰ تومان", category: "main" },
+        { id: "f2", restId: "rest_1", name: "چلو کباب کوبیده زعفرانی", price: "۳۱۰,۰۰۰ تومان", category: "main" },
+        { id: "f3", restId: "rest_1", name: "سوپ جو مخصوص", price: "۶۵,۰۰۰ تومان", category: "appetizer" },
+        { id: "f4", restId: "rest_1", name: "دوغ محلی نعناعی", price: "۳۵,۰۰۰ تومان", category: "drink" }
+      ]
     };
 
-    let appState = { ...initialData };
+    let appState = { ...defaultData };
     let currentCategory = 'main';
     let currentSelections = {};
 
-    window.onload = function() {
+    window.onload = async function() {
       loadStateFromStorage();
       renderPassengerView();
+      await fetchOnlineMenu(false);
     };
 
     function saveState() {
@@ -357,12 +306,70 @@
       try {
         const stored = localStorage.getItem('chahargah_food_state');
         if (stored) {
-          appState = { ...initialData, ...JSON.parse(stored) };
+          appState = { ...defaultData, ...JSON.parse(stored) };
         }
       } catch (e) {
-        appState = { ...initialData };
+        appState = { ...defaultData };
       }
       document.getElementById('googleSheetWebhookUrl').value = appState.sheetWebhook || GOOGLE_SHEET_URL;
+    }
+
+    // خواندن خودکار منوی آنلاین از گوگل شیت
+    async function fetchOnlineMenu(showToast = false) {
+      const url = appState.sheetWebhook || GOOGLE_SHEET_URL;
+      if (!url) return;
+
+      document.getElementById('syncText').textContent = 'بروزرسانی منو...';
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        if (data.restaurants && data.restaurants.length > 0) {
+          appState.restaurants = data.restaurants;
+          const active = data.restaurants.find(r => r.isActive);
+          if (active) appState.activeRestaurantId = active.id;
+          else appState.activeRestaurantId = data.restaurants[0].id;
+        }
+        
+        if (data.foods && data.foods.length > 0) {
+          appState.foods = data.foods;
+        }
+
+        saveState();
+        renderPassengerView();
+        document.getElementById('syncText').textContent = 'سامانه آنلاین سفارش غذا';
+        if (showToast) showCustomAlert('بروزرسانی شد', 'آخرین منوی آنلاین از شیت بارگذاری شد.', 'success');
+      } catch (err) {
+        document.getElementById('syncText').textContent = 'سامانه سفارش غذا (آفلاین)';
+        console.warn("Could not fetch online menu:", err);
+      }
+    }
+
+    // ارسال منوی گوشی به گوگل شیت
+    async function pushMenuToSheet() {
+      const url = appState.sheetWebhook || GOOGLE_SHEET_URL;
+      const btn = document.getElementById('pushSheetBtn');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = 'در حال ارسال...';
+
+      try {
+        await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'sync_menu',
+            restaurants: appState.restaurants,
+            foods: appState.foods
+          })
+        });
+        showCustomAlert('موفق', 'تمامی رستوران‌ها و غذاها به گوگل شیت ارسال شدند و اکنون همه مسافران آنها را می‌بینند.', 'success');
+      } catch (e) {
+        showCustomAlert('خطا', 'ارسال اطلاعات به شیت با خطا مواجه شد.', 'error');
+      }
+      btn.disabled = false;
+      btn.innerHTML = originalText;
     }
 
     function renderPassengerView() {
@@ -441,11 +448,8 @@
     function adjustFoodCount(foodId, delta) {
       const current = currentSelections[foodId] || 0;
       const next = Math.max(0, current + delta);
-      if (next === 0) {
-        delete currentSelections[foodId];
-      } else {
-        currentSelections[foodId] = next;
-      }
+      if (next === 0) delete currentSelections[foodId];
+      else currentSelections[foodId] = next;
       renderFoodItems();
       updateSelectedTotalBadge();
     }
@@ -487,6 +491,7 @@
       const timestamp = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'short', timeStyle: 'short' }).format(now);
 
       const payload = {
+        action: 'order',
         passengerName: passengerName,
         orderDetails: orderDetailsText,
         notes: notes || '-',
@@ -497,10 +502,7 @@
       const submitBtn = document.getElementById('submitOrderBtn');
       const originalText = submitBtn.innerHTML;
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `<span>در حال ارسال...</span>`;
-
-      appState.ordersHistory.push(payload);
-      saveState();
+      submitBtn.innerHTML = `<span>در حال ثبت...</span>`;
 
       const sheetUrl = appState.sheetWebhook || GOOGLE_SHEET_URL;
       if (sheetUrl && sheetUrl.startsWith('http')) {
@@ -595,7 +597,7 @@
       saveState();
       renderRestaurantList();
       populateRestaurantSelectors();
-      showCustomAlert('ثبت شد', `رستوران «${name}» افزوده شد.`, 'success');
+      showCustomAlert('ثبت شد', `رستوران افزوده شد. برای ارسال به همه مسافران، دکمه «ارسال به شیت مسافران» را بزنید.`, 'success');
     }
 
     function setActiveRestaurant(restId) {
@@ -603,6 +605,7 @@
       appState.restaurants.forEach(r => r.isActive = (r.id === restId));
       saveState();
       renderRestaurantList();
+      showCustomAlert('تغییر وضعیت', 'رستوران فعال شد. فراموش نکنید دکمه «ارسال به شیت مسافران» را بزنید تا مسافران هم منوی جدید را ببینند.', 'info');
     }
 
     function deleteRestaurant(restId) {
@@ -683,7 +686,7 @@
       document.getElementById('newFoodName').value = '';
       document.getElementById('newFoodPrice').value = '';
       renderLeaderFoods();
-      showCustomAlert('ثبت شد', `«${name}» به منو اضافه شد.`, 'success');
+      showCustomAlert('ثبت شد', `«${name}» اضافه شد.`, 'success');
     }
 
     function deleteFoodItem(foodId) {
@@ -697,6 +700,8 @@
       const container = document.getElementById('leaderFoodsList');
       container.innerHTML = '';
       const foods = appState.foods.filter(f => f.restId === targetRestId);
+
+      document.getElementById('foodCountBadge').textContent = `${toPersianDigits(foods.length)} مورد`;
 
       if (foods.length === 0) {
         container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">آیتمی برای این رستوران ثبت نشده است.</p>';
@@ -727,49 +732,6 @@
       appState.sheetWebhook = document.getElementById('googleSheetWebhookUrl').value.trim();
       saveState();
       showCustomAlert('ذخیره شد', 'آدرس شیت ذخیره شد.', 'success');
-    }
-
-    async function testSheetConnection() {
-      const url = document.getElementById('googleSheetWebhookUrl').value.trim();
-      if (!url) return;
-      try {
-        await fetch(url, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            passengerName: "تست لیدر",
-            orderDetails: "کباب کوبیده (۱ عدد)",
-            notes: "اتصال موفق",
-            timestamp: new Intl.DateTimeFormat('fa-IR', { dateStyle: 'short', timeStyle: 'short' }).format(new Date())
-          })
-        });
-        showCustomAlert('ارسال شد', 'تست ارسال شد. شیت خود را چک کنید.', 'success');
-      } catch (err) {
-        showCustomAlert('خطا', 'ارسال ناموفق بود.', 'error');
-      }
-    }
-
-    function exportOrdersToCSV() {
-      if (!appState.ordersHistory.length) {
-        showCustomAlert('خالی است', 'سفارشی ثبت نشده است.', 'warning');
-        return;
-      }
-      let csv = "\uFEFFنام مسافر,شرح سفارش و تعداد,توضیحات,زمان ثبت,رستوران\n";
-      appState.ordersHistory.forEach(o => {
-        csv += `"${o.passengerName || ''}","${o.orderDetails || ''}","${o.notes || ''}","${o.timestamp || ''}","${o.restaurant || ''}"\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `orders_${new Date().toISOString().slice(0,10)}.csv`;
-      link.click();
-    }
-
-    function clearOrdersHistory() {
-      appState.ordersHistory = [];
-      saveState();
-      showCustomAlert('پاک شد', 'حافظه داخلی پاک شد.', 'success');
     }
 
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
